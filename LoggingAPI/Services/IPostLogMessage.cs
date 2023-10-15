@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using LoggingAPI.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LoggingAPI.Services
 {
     public interface IPostLogMessage
     {
-        Task ProcessLogMessagesAsync(List<LogMessage> logMessages);
+        List<CreateLogRequestModel> ProcessLogMessages(List<CreateLogRequestModel> logMessages);
     }
 }

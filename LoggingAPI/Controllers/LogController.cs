@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LoggingAPI.Data.Models;
+using LoggingAPI.Models;
+using LoggingAPI.Services;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,22 +11,23 @@ namespace LoggingAPI.Controllers
     [Route("[controller]")]
     public class LogController : ControllerBase
     {
-        private readonly LoggingContext _context;
+        private readonly IPostLogMessage _logMessageProcessor;
 
-        public LogController(LoggingContext context)
+        public LogController(IPostLogMessage logMessageProcessor)
         {
-            _context = context;
+            _logMessageProcessor = logMessageProcessor;
         }
-
+        
+        [Route("/Logs/create")]
         [HttpPost]
-        public async Task<IActionResult> PostLogMessage(List<LogMessage> logMessages)
+        public async Task<ActionResult> Create([FromBody] List<CreateLogRequestModel> logMessages)
         {
-            // Process the log messages, extract log levels, etc.
-            // Save to the database
-            await _context.LogMessages.AddRangeAsync(logMessages);
-            await _context.SaveChangesAsync();
-
-            return Ok();
+            if (logMessages == null || !ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var processedMessages = _logMessageProcessor.ProcessLogMessages(logMessages);
+            return Ok(processedMessages);
         }
     }
 
