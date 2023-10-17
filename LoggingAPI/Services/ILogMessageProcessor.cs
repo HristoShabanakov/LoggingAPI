@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace LoggingAPI.Services
 {
-    public interface IPostLogMessage
+    public interface ILogMessageProcessor
     {
-        List<CreateLogRequestModel> ProcessLogMessages(List<CreateLogRequestModel> logMessages);
+        Task ProcessLogMessagesAsync(List<CreateLogRequestModel> logMessages);
     }
 }

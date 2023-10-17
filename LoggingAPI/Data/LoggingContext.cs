@@ -42,7 +42,6 @@ namespace LoggingAPI.Data
             modelBuilder.Entity<Application>()
                 .HasIndex(a => a.Name)
                 .IsUnique();
-            
         }
     }
 }

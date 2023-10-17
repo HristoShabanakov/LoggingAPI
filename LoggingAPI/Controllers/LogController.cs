@@ -1,5 +1,4 @@
-﻿using LoggingAPI.Data.Models;
-using LoggingAPI.Models;
+﻿using LoggingAPI.Models;
 using LoggingAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -11,23 +10,24 @@ namespace LoggingAPI.Controllers
     [Route("[controller]")]
     public class LogController : ControllerBase
     {
-        private readonly IPostLogMessage _logMessageProcessor;
+        private readonly ILogMessageProcessor _logMessageProcessor;
 
-        public LogController(IPostLogMessage logMessageProcessor)
+        public LogController(ILogMessageProcessor logMessageProcessor)
         {
             _logMessageProcessor = logMessageProcessor;
         }
         
         [Route("/Logs/create")]
         [HttpPost]
-        public async Task<ActionResult> Create([FromBody] List<CreateLogRequestModel> logMessages)
+        public async Task<IActionResult> Create([FromBody] List<CreateLogRequestModel> logMessages)
         {
             if (logMessages == null || !ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var processedMessages = _logMessageProcessor.ProcessLogMessages(logMessages);
-            return Ok(processedMessages);
+            await _logMessageProcessor.ProcessLogMessagesAsync(logMessages);
+
+            return Ok();
         }
     }
 

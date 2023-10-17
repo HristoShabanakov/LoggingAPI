@@ -1,6 +1,5 @@
-using AspNetCoreRateLimit;
-using LoggingAPI.Controllers;
 using LoggingAPI.Data;
+using LoggingAPI.Data.Repository;
 using LoggingAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,29 +24,14 @@ namespace LoggingAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddScoped<IPostLogMessage, LogMessageProcessor>();
+            services.AddTransient<ILogMessageProcessor, LogMessageProcessor>();
+            services.AddTransient<IRepository, Repository>();
             services.AddDbContext<LoggingContext>(options =>
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LoggingAPI", Version = "v1" });
             });
-
-            // load configuration from appsettings.json
-            services.AddOptions();
-
-            // store rate limit counters and ip rules
-            services.AddMemoryCache();
-
-            //load general configuration from appsettings.json
-            services.Configure<IpRateLimitOptions>(Configuration.GetSection("IpRateLimiting"));
-
-            // inject counter and rules stores
-            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
-            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
-
-            // configuration (resolvers, counter key builders)
-            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,8 +64,6 @@ namespace LoggingAPI
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "LoggingAPI V1");
             });
-
-            app.UseIpRateLimiting();
         }
     }
 }
