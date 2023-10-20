@@ -1,5 +1,3 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 # Use the official .NET 6.0 runtime image as the base image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
@@ -8,10 +6,9 @@ EXPOSE 80
 # Use the .NET 6.0 SDK image to build the app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["LoggingAPI/LoggingAPI.csproj", "LoggingAPI/"]
-RUN dotnet restore "LoggingAPI/LoggingAPI.csproj"
+COPY ["LoggingAPI.csproj", "./"]
+RUN dotnet restore "LoggingAPI.csproj"
 COPY . .
-WORKDIR "/src/LoggingAPI"
 RUN dotnet build "LoggingAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
@@ -21,3 +18,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "LoggingAPI.dll"]
+

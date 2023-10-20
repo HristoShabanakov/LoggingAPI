@@ -8,16 +8,16 @@ namespace LoggingAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class LogController : ControllerBase
+    public class LogsController : ControllerBase
     {
         private readonly ILogMessageProcessor _logMessageProcessor;
 
-        public LogController(ILogMessageProcessor logMessageProcessor)
+        public LogsController(ILogMessageProcessor logMessageProcessor)
         {
             _logMessageProcessor = logMessageProcessor;
         }
         
-        [Route("/Logs/create")]
+        [Route("create")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] List<CreateLogRequestModel> logMessages)
         {

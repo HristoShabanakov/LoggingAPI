@@ -1,5 +1,6 @@
 ﻿using LoggingAPI.Data.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace LoggingAPI.Data
 {
@@ -14,7 +15,7 @@ namespace LoggingAPI.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseNpgsql(connectionString:
-               "Server=localhost;Port=5432;User Id=user;Password=password;Database=logs_db;");
+               "Server=postgres_database;Port=5432;User Id=user;Password=password;Database=logs_db;");
             base.OnConfiguring(optionsBuilder);
         }
 
