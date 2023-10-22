@@ -1,6 +1,5 @@
 ﻿using LoggingAPI.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace LoggingAPI.Data
 {

@@ -15,7 +15,11 @@ namespace LoggingAPI.Services
         {
             this.repository = repository;
         }
-
+        /// <summary>
+        /// Asynchronously processes a list of raw log requests, extracts relevant log information, and saves them to the database.
+        /// </summary>
+        /// <param name="rawLogRequests">The list of raw log requests to process.</param>
+        /// <returns>A Task representing the asynchronous operation.</returns>
         public async Task ProcessLogMessagesAsync(List<CreateLogRequestModel> rawLogRequests)
         {
             var processedMessages = new List<LogMessage>();
@@ -46,6 +50,11 @@ namespace LoggingAPI.Services
             await repository.CreateLogMessagesAsync(processedMessages);
         }
 
+        /// <summary>
+        /// Extracts the log level from the provided message string.
+        /// </summary>
+        /// <param name="message">The message string to analyze.</param>
+        /// <returns>The identified log level.</returns>
         private static LogLevel ExtractLogLevel(string message)
         {
             var split = message.Split("]", StringSplitOptions.RemoveEmptyEntries);
@@ -66,6 +75,11 @@ namespace LoggingAPI.Services
             };
         }
 
+        /// <summary>
+        /// Extracts the actual message content from the provided message string.
+        /// </summary>
+        /// <param name="message">The message string to analyze.</param>
+        /// <returns>The extracted message content.</returns>
         private static string ExtractMessage(string message)
         {
             var split = message.Split("]", StringSplitOptions.RemoveEmptyEntries);
