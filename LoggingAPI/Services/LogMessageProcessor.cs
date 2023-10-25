@@ -84,7 +84,7 @@ namespace LoggingAPI.Services
         {
             var split = message.Split("]", StringSplitOptions.RemoveEmptyEntries);
 
-            if (split.Length > 0)
+            if (split.Length > 1)
             {
                 return split[1].Trim();
             }
