@@ -1,22 +1,18 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
+# Use the official .NET 6.0 runtime image as the base image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
 
-ENV ASPNETCORE_ENVIRONMENT=Development 
-
+# Use the .NET 6.0 SDK image to build the app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Proxy/Proxy.csproj", "Proxy/"]
-RUN dotnet restore "Proxy/Proxy.csproj"
-COPY . .
-WORKDIR "/src/Proxy"
-RUN dotnet build "Proxy.csproj" -c Release -o /app/build
+COPY ./Proxy/*.csproj ./
+RUN dotnet restore
+COPY ./Proxy/ ./
+RUN dotnet build -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Proxy.csproj" -c Release -o /app/publish
+RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app

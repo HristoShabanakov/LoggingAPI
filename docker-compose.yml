@@ -24,54 +24,85 @@ services:
       PGADMIN_DEFAULT_PASSWORD: strong-password
     volumes:
       - pg-admin-data:/var/lib/pgadmin
+    depends_on:
+      - postgres_database
+
   proxy:
+    container_name: proxy
     build:
       context: .
       dockerfile: ./Proxy/Dockerfile
     ports:
       - 5000:80
+    depends_on:
+      - postgres_database
+
   app1:
+    container_name: app1
     build:
       context: .
       dockerfile: ./LoggingAPI/Dockerfile
-    depends_on:
-      - postgres_database
     ports:
       - 5001:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=DbInitializer
+    depends_on:
+      - postgres_database
+    entrypoint: ["/app/wait-for-it.sh", "postgres_database:5432", "--", "dotnet", "LoggingAPI.dll"]
 
   app2:
+    container_name: app2
     build:
       context: .
       dockerfile: ./LoggingAPI/Dockerfile
-    depends_on:
-      - postgres_database
     ports:
       - 5002:80
+    depends_on:
+      - app1
+      - postgres_database
+    entrypoint: ["/app/wait-for-it.sh", "postgres_database:5432", "--", "dotnet", "LoggingAPI.dll"]
+
   app3:
+    container_name: app3
     build:
       context: .
       dockerfile: ./LoggingAPI/Dockerfile
-    depends_on:
-      - postgres_database
     ports:
       - 5003:80
+    depends_on:
+      - app1
+      - postgres_database
+    entrypoint: ["/app/wait-for-it.sh", "postgres_database:5432", "--", "dotnet", "LoggingAPI.dll"]
 
   app4:
+    container_name: app4
     build:
       context: .
       dockerfile: ./LoggingAPI/Dockerfile
-    depends_on:
-      - postgres_database
     ports:
       - 5004:80
+    depends_on:
+      - app1
+      - postgres_database
+    entrypoint: ["/app/wait-for-it.sh", "postgres_database:5432", "--", "dotnet", "LoggingAPI.dll"]
+
   app5:
+    container_name: app5
     build:
       context: .
       dockerfile: ./LoggingAPI/Dockerfile
-    depends_on:
-      - postgres_database
     ports:
       - 5005:80
+    depends_on:
+      - app1
+      - postgres_database
+    entrypoint: ["/app/wait-for-it.sh", "postgres_database:5432", "--", "dotnet", "LoggingAPI.dll"]
+
+networks:
+  default:
+    name: proxy-network
+    driver: bridge
+    
 volumes:
   pg-db-data:
   pg-admin-data:
