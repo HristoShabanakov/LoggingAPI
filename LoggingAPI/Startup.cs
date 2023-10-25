@@ -54,16 +54,25 @@ namespace LoggingAPI
             });
 
             // Auto migrations
-            using var scope = app.ApplicationServices.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<LoggingContext>();
-            db.Database.EnsureCreated();
-            
+
+            if (env.EnvironmentName== "DbInitializer")
+            {
+                InitializeDatabase(app);
+            }
+
             app.UseSwagger();
 
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "LoggingAPI V1");
             });
+        }
+
+        private static void InitializeDatabase(IApplicationBuilder app)
+        {
+            using var scope = app.ApplicationServices.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<LoggingContext>();
+            context.Database.EnsureCreated();
         }
     }
 }
