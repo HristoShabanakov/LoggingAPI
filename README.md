@@ -62,13 +62,25 @@ The primary components of the LoggingAPI include:
    - Access the pgAdmin4 interface at `http://localhost:8887`
    - Username: `user-name@domain-name.com`
    - Password: `strong-password`
+   
+![Screenshot (562)](https://github.com/HristoShabanakov/LoggingAPI/assets/32416999/2bbf3679-7619-4f84-964c-f100a8b67a36)
 
 2. **Create Server**:
    - Click on the `Add New Server` icon in the `Quick Links` section.
+     
+     ![Screenshot (563)](https://github.com/HristoShabanakov/LoggingAPI/assets/32416999/a7c886fa-a59b-4fd4-9364-c093482d0c5c)
+
    - In the `General` tab, name your server.
+     
+     ![Screenshot (564)](https://github.com/HristoShabanakov/LoggingAPI/assets/32416999/bf6cc5ac-9e0a-4fc4-888d-abdf5295a6ca)
+
    - In the `Connection` tab:
      - Enter `postgres_database` as the `Hostname/Address`.
      - Use `5432` as the port.
      - Username: `user`
      - Password: `password`
      - Click the "Save" button.
+    
+     ![Screenshot (565)](https://github.com/HristoShabanakov/LoggingAPI/assets/32416999/675cf79f-d9c5-44bb-a798-da3fe439354e)
+
+
